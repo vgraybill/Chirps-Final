@@ -1,0 +1,1195 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap");
+body {
+  font-family: "Baloo 2", cursive;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: #400f1e;
+}
+body a {
+  color: #d03192;
+  font-weight: 500;
+}
+
+header {
+  background-color: #ec9bc1;
+  width: 100%;
+  padding-bottom: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 8;
+}
+header a {
+  color: #fff;
+}
+header .flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+header h1 {
+  font-size: 2.8125rem;
+  padding: 20px 0;
+}
+header h1 a {
+  color: #fff;
+  text-decoration: none;
+}
+header .button {
+  background-color: #c169a8;
+  text-decoration: none;
+  padding: 0 10px;
+  border-radius: 20px;
+}
+header .login-search {
+  width: 100%;
+}
+header .login-search h5 {
+  text-align: center;
+}
+header .login-search input {
+  display: block;
+  width: 80%;
+  margin: 5px auto;
+  padding: 5px 8px 5px 30px;
+  border-radius: 20px;
+  border: none;
+  background-image: url("../img/magnifying-glass-solid.png");
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: 7px 4px;
+}
+header .login-search input:focus {
+  outline: 3px solid #c169a8;
+}
+header .login-search input.hidden {
+  display: none;
+  padding: 0;
+}
+
+@media (min-width: 650px) {
+  header .wrapped {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  header h1 {
+    font-size: 3.375rem;
+    position: relative;
+    top: 10px;
+  }
+  header .flex {
+    width: 100%;
+    align-items: flex-end;
+    position: relative;
+    top: -5px;
+    justify-content: space-between;
+    padding-left: 15px;
+  }
+  header .login-search {
+    padding-right: 20px;
+    width: 50%;
+  }
+  header .login-search h5 {
+    text-align: right;
+  }
+  header .login-search input {
+    width: 100%;
+    margin: 0;
+    margin-left: 10px;
+  }
+}
+@media (min-width: 900px) {
+  header h1 {
+    font-size: 3.9375rem;
+  }
+}
+main {
+  position: relative;
+}
+main h2, main h3, main h4, main h5 {
+  font-size: 1.0227272727rem;
+}
+main div.wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+main div.wrapper.poem-int {
+  margin: 20px auto;
+  flex-direction: column;
+}
+main div.wrapper.poem-int .posts {
+  margin-bottom: 0;
+}
+main .solid-heart, main .lined-heart {
+  font-size: 1.5rem;
+  color: #c169a8;
+  position: relative;
+  cursor: pointer;
+}
+main .lined-heart {
+  color: white;
+  text-shadow: -1px -1px 0 #c169a8, 1px 1px 0 #c169a8, -1px 1px 0 #c169a8, 1px -1px 0 #c169a8;
+  -webkit-text-stroke: 2px #c169a8;
+  cursor: pointer;
+}
+main .fa-message {
+  color: #d03192;
+  left: 3px;
+  position: relative;
+}
+main .fa-star {
+  color: #e3809e;
+  top: -1px;
+  position: relative;
+  padding-left: 30px;
+}
+
+.int-wrapper {
+  max-width: 400px;
+  margin: 50px auto 0;
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f6d7ea;
+  border-radius: 20px;
+  position: relative;
+}
+.int-wrapper .feedback {
+  padding-top: 10px;
+}
+.int-wrapper .feedback li {
+  list-style: none;
+}
+.int-wrapper a {
+  color: #dc458c;
+}
+.int-wrapper h2 {
+  font-size: 1.6875rem;
+}
+.int-wrapper .button {
+  background-color: #c169a8;
+  text-decoration: none;
+  padding: 0 20px;
+  border-radius: 20px;
+  font-size: 1.35rem;
+  font-family: "Baloo 2", cursive;
+  color: #fff;
+  border: none;
+}
+.int-wrapper label {
+  display: block;
+  font-size: 1.265625rem;
+  margin: 15px 0;
+}
+.int-wrapper label p {
+  text-align: center;
+}
+.int-wrapper label input {
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  text-align: left;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+}
+.int-wrapper label input:focus {
+  outline: 3px solid #c169a8;
+}
+.int-wrapper label:last-of-type {
+  font-size: 1.125rem;
+  padding-top: 20px;
+}
+.int-wrapper label:last-of-type input {
+  width: unset;
+  display: inline;
+}
+.int-wrapper label:last-of-type input:focus {
+  outline: none;
+}
+.int-wrapper .profile-pic {
+  width: 20%;
+  border-radius: 20px;
+  border: 2px solid #e470a6;
+  margin: 10px;
+}
+.int-wrapper p {
+  text-align: left;
+  padding-bottom: 20px;
+}
+
+@media (min-width: 650px) {
+  main div.wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  main div.wrapper.poem-int {
+    margin: 0 auto;
+    flex-direction: row;
+  }
+  main section.posts {
+    margin-top: 15px;
+    margin-right: 15px;
+  }
+  main section.posts .user-info {
+    padding: 0 15px 10px;
+    width: 99%;
+  }
+  main section.posts .under-post {
+    display: flex;
+    padding: 0 15px;
+  }
+  main section.posts img.post {
+    width: 100%;
+    max-width: 500px;
+    margin-left: 15px;
+    border-radius: 15px;
+  }
+  main aside {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 43%;
+    align-items: flex-start;
+    padding-left: 20px;
+    padding-right: 15px;
+  }
+  main aside .aside-wrapper {
+    width: 100%;
+    padding: 10px 0px;
+  }
+  main aside .aside-wrapper img {
+    display: block;
+    width: 100%;
+    max-width: 350px;
+    margin: 5px 0;
+  }
+  main aside.poem-aside {
+    margin: 80px 15px;
+    display: block;
+  }
+  main aside.poem-aside label {
+    display: block;
+  }
+  main aside.poem-aside textarea {
+    resize: none;
+    height: 5rem;
+    width: 90%;
+    max-width: 350px;
+    display: block;
+    font-family: "Baloo 2", cursive;
+    font-size: 0.7875rem;
+  }
+  main aside.tos-aside {
+    position: sticky;
+  }
+}
+.profile-int {
+  width: 100%;
+  max-width: 990px;
+  margin: 0 auto;
+}
+.profile-int .user-info {
+  padding: 30px 10px 15px;
+  display: flex;
+  flex-direction: column;
+}
+.profile-int .user-info .please {
+  display: flex;
+}
+.profile-int .user-info h2 {
+  font-size: 1.6875rem;
+  padding-right: 20px;
+}
+.profile-int .user-info .title-time {
+  width: 80%;
+  padding-left: 15px;
+}
+.profile-int .user-info div.title-time div {
+  display: flex;
+  width: 100%;
+}
+.profile-int .user-info h3 {
+  padding-top: 5px;
+}
+.profile-int .profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+}
+.profile-int .poetry-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 990px;
+  width: fit-content;
+  margin: 0 auto 100px;
+  align-items: center;
+}
+.profile-int .poetry-gallery .profile-img {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+@media (min-width: 650px) {
+  .profile-int .poetry-gallery a {
+    width: 80%;
+  }
+  .profile-int .poetry-gallery a .profile-img {
+    width: 100%;
+    margin: 0 auto 15px;
+  }
+}
+@media (min-width: 750px) {
+  .profile-int .poetry-gallery a {
+    width: 33%;
+  }
+  .profile-int .poetry-gallery a .profile-img {
+    width: 95%;
+  }
+}
+img.post {
+  width: 100%;
+}
+
+section.posts {
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+section.posts .user-info {
+  padding: 0 10px 10px;
+  display: flex;
+}
+section.posts .user-info .title-time {
+  width: 100%;
+  padding-left: 15px;
+}
+section.posts .user-info div.title-time div {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+section.posts:last-of-type {
+  margin-bottom: 80px;
+}
+section.posts .profile-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+section.posts .under-post {
+  display: flex;
+  padding: 0 10px;
+}
+section.posts .under-post .next-to-likes {
+  display: block;
+}
+section.posts .under-post .next-to-likes h5 {
+  display: inline;
+}
+section.posts .under-post i {
+  padding-right: 19px;
+}
+section.posts .under-post .lined-heart, section.posts .under-post .solid-heart {
+  padding-right: 10px;
+}
+section.posts .under-post .likes {
+  display: flex;
+}
+section.posts .under-post .likes img {
+  width: unset;
+  display: block;
+  margin: 5px 3px 5px 0;
+  top: -1px;
+  left: 2px;
+  margin-right: 18px;
+  position: relative;
+}
+section.posts .under-post span + h5 {
+  position: relative;
+  top: -3px;
+  display: inline;
+}
+section.posts .under-post .star-button {
+  font-size: 1.75rem;
+  color: #ecaabe;
+  padding-right: 5px;
+  cursor: pointer;
+}
+section.posts .under-post .star-button + h5 {
+  top: -4px;
+  left: 6px;
+  position: relative;
+}
+section.posts .under-post h5, section.posts .under-post p {
+  position: relative;
+  top: -5px;
+}
+
+aside {
+  display: none;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  margin-bottom: 50px;
+  background-color: #fff;
+}
+aside::-webkit-scrollbar {
+  height: 10px;
+}
+aside::-webkit-scrollbar-track {
+  background-color: #FDE0F2;
+}
+aside::-webkit-scrollbar-thumb {
+  background-color: #E384BE;
+  border-radius: 10px;
+  border: 2px solid #FDE0F2;
+}
+aside::-webkit-scrollbar-button {
+  width: 5px;
+  background-color: #FDE0F2;
+}
+aside .aside-wrapper {
+  flex: 0 0 auto;
+  width: 200px;
+  padding: 10px 40px;
+}
+aside .aside-wrapper h5 {
+  font-size: 1.0125rem;
+  padding-left: 15px;
+}
+aside .aside-wrapper img {
+  display: none;
+}
+aside .aside-wrapper .under-aside span.likes {
+  display: flex;
+}
+aside .aside-wrapper .under-aside span.likes img {
+  width: unset;
+}
+aside .aside-wrapper .aside-header, aside .aside-wrapper .under-aside {
+  display: flex;
+}
+aside .aside-wrapper .aside-header i, aside .aside-wrapper .under-aside i {
+  margin-right: 10px;
+  top: 3px;
+  position: relative;
+}
+aside .aside-wrapper i.fa-mug-hot {
+  top: 0;
+}
+aside.poem-aside {
+  margin: 20px 15px;
+  display: block;
+}
+aside.poem-aside label {
+  display: block;
+  position: relative;
+}
+aside.poem-aside label h5 {
+  margin: 0 0 5px;
+}
+aside.poem-aside textarea {
+  resize: none;
+  height: 5rem;
+  width: 94%;
+  display: block;
+  background-color: #FDE0F2;
+  border: none;
+  border-radius: 20px;
+  padding: 10px;
+  position: relative;
+  left: 2px;
+  font-family: "Baloo 2", cursive;
+}
+aside.poem-aside textarea:focus {
+  outline: 2px solid #c169a8;
+}
+aside.poem-aside form {
+  margin-top: 20px;
+  position: relative;
+}
+aside.poem-aside form .feedback {
+  padding: 0;
+  margin: 0;
+  position: relative;
+  top: -0.5rem;
+}
+aside.poem-aside .button {
+  padding: 0 20px;
+  background-color: #c169a8;
+  color: white;
+  font-family: "Baloo 2", cursive;
+  font-size: 1.125rem;
+  border: none;
+  border-radius: 20px;
+  margin-top: 15px;
+}
+
+span.error {
+  font-size: 0.9rem;
+  padding: 0 5px;
+  font-style: italic;
+  color: #df91b9;
+}
+span.error ul li {
+  list-style: none;
+}
+
+.openpacks {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.openpacks ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px 0 10px 15px;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.0227272727rem;
+}
+.openpacks li {
+  list-style: none;
+  margin-right: 10px;
+  margin-top: 4px;
+}
+.openpacks li.pack {
+  padding: 0 15px;
+  background-color: #df91b9;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: 500;
+}
+.openpacks li.pack a {
+  color: white;
+  text-decoration: none;
+}
+.openpacks h2 {
+  text-align: center;
+  font-size: 1.6875rem;
+}
+
+.poetry-int {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+.poetry-int div.word-box {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 10px 20px 20px;
+  font-size: 1.0227272727rem;
+  border-radius: 20px;
+}
+.poetry-int div.word-box.adjective {
+  background-color: #f6d7ea;
+}
+.poetry-int div.word-box.noun {
+  background-color: #fcf1f6;
+}
+.poetry-int div.word-box.verb {
+  background-color: #f6e0eb;
+}
+.poetry-int div.word-box.adverb {
+  background-color: #fffdfe;
+}
+.poetry-int div.word-box.other {
+  background-color: #dfb1d2;
+}
+.poetry-int div.word-box.all {
+  background-color: #FDE0F2;
+}
+.poetry-int div.word-box.punk {
+  background-color: #FDE0F2;
+}
+.poetry-int div.word-box.ends {
+  background-color: #FDE0F2;
+}
+.poetry-int div.word-box .word {
+  cursor: pointer;
+}
+.poetry-int .adjective {
+  background-color: #E384BE;
+}
+.poetry-int .adjective.greyed {
+  background-color: #c5a2b7;
+}
+.poetry-int .noun {
+  background-color: #e470a6;
+}
+.poetry-int .noun.greyed {
+  background-color: #d4b3c2;
+}
+.poetry-int .pronoun {
+  background-color: #ec9bc1;
+}
+.poetry-int .pronoun.greyed {
+  background-color: #d4b3c2;
+}
+.poetry-int .verb {
+  background-color: #df91b9;
+}
+.poetry-int .verb.greyed {
+  background-color: #c3adb8;
+}
+.poetry-int .adverb {
+  background-color: #ecaabe;
+}
+.poetry-int .adverb.greyed {
+  background-color: #d7bfc6;
+}
+.poetry-int .article {
+  background-color: #c97bb3;
+}
+.poetry-int .article.greyed {
+  background-color: #979396;
+}
+.poetry-int .conjunction {
+  background-color: #d08dbd;
+}
+.poetry-int .conjunction.greyed {
+  background-color: #979396;
+}
+.poetry-int .preposition {
+  background-color: #c169a8;
+}
+.poetry-int .preposition.greyed {
+  background-color: #979396;
+}
+.poetry-int .all {
+  background-color: #FDE0F2;
+  color: #6A1831;
+}
+.poetry-int .ends {
+  background-color: #f780ca;
+}
+.poetry-int .punctuation {
+  background-color: #f780ca;
+}
+.poetry-int .word-nav {
+  display: flex;
+  color: white;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+.poetry-int .word-nav div {
+  padding: 0 15px;
+  margin-right: 10px;
+  border-radius: 20px;
+  display: none;
+}
+.poetry-int .word-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+.poetry-int .word-nav ul li {
+  list-style: none;
+  padding: 0 12px;
+  border-radius: 20px;
+  margin-right: 10px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.poetry-int .words {
+  display: flex;
+  flex-wrap: wrap;
+  color: white;
+}
+
+.word {
+  padding: 0 12px;
+  border-radius: 20px;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.word-box.adjective, .word-box.adverb, .word-box.verb, .word-box.other, .word-box.all, .word-box.ends, .word-box.punk {
+  display: none;
+}
+
+.poetry-maker {
+  position: relative;
+}
+.poetry-maker .poem-error {
+  position: relative;
+  top: -2rem;
+}
+
+.poem {
+  background-color: #f6d7ea;
+  padding: 20px;
+  margin: 20px auto 0;
+  border-radius: 20px;
+  width: 400px;
+  min-height: 250px;
+}
+.poem .line {
+  height: 2.3rem;
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.poem .line:first-of-type {
+  margin-top: 0;
+}
+.poem .line .word {
+  padding: 0 12px;
+  border-radius: 20px;
+  margin-right: 10px;
+  margin-top: 5px;
+  opacity: 100%;
+  color: white;
+}
+
+@media (min-width: 750px) {
+  .poetry-int {
+    margin: 50px auto 0;
+  }
+}
+form {
+  height: fit-content;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+.controls p {
+  padding-right: 20px;
+}
+
+.submit-poem {
+  max-width: 750px;
+  margin: 0 auto 100px;
+  padding: 0 15px;
+}
+.submit-poem form {
+  display: flex;
+  align-items: flex-start;
+}
+.submit-poem form .input {
+  width: 100%;
+}
+.submit-poem form .input label:last-of-type {
+  margin-top: 15px;
+}
+.submit-poem form .input input, .submit-poem form .input textarea {
+  display: block;
+  width: 90%;
+  background-color: #FDE0F2;
+  border: none;
+  border-radius: 20px;
+  padding: 10px;
+  font-family: "Baloo 2", cursive;
+}
+.submit-poem form .input input:focus, .submit-poem form .input textarea:focus {
+  outline: 2px solid #c169a8;
+}
+.submit-poem form .input textarea {
+  resize: none;
+  height: 7rem;
+}
+.submit-poem .checks {
+  position: relative;
+  width: 70%;
+  height: 210px;
+  top: 20px;
+  margin-left: 30px;
+}
+.submit-poem .checks div:last-of-type {
+  position: relative;
+  top: 47%;
+}
+.submit-poem .checks .button {
+  padding: 0 20px;
+  background-color: #c169a8;
+  color: white;
+  font-family: "Baloo 2", cursive;
+  font-size: 1.125rem;
+  border: none;
+  border-radius: 20px;
+}
+.submit-poem .checks input {
+  margin-right: 10px;
+  background-color: #FDE0F2;
+}
+.submit-poem label {
+  display: block;
+}
+
+.tos-mess {
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #ec9bc1;
+  padding: 10px 0;
+}
+footer a {
+  color: white;
+  text-decoration: none;
+}
+footer ul {
+  display: flex;
+  width: 90%;
+  max-width: 800px;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+footer li {
+  list-style: none;
+}
+
+.blank {
+  margin: 237px 0;
+}
+.blank.register {
+  margin: 194px 0;
+}
+.blank.about {
+  margin: 115px 0;
+}
+
+.search-int {
+  width: 100%;
+  max-width: 750px;
+  margin: 40px auto;
+}
+.search-int .item {
+  margin-bottom: 30px;
+}
+.search-int h2 {
+  font-size: 1.96875rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.search-int h2 span {
+  font-style: italic;
+  color: #df91b9;
+}
+.search-int img {
+  width: 100%;
+}
+.search-int .under-post {
+  display: flex;
+  justify-content: space-between;
+}
+.search-int h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.search-int .date {
+  position: relative;
+  top: -5px;
+  font-size: 1.0125rem;
+}
+
+.pagination {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto 150px;
+  padding-bottom: 50px;
+}
+.pagination a.button {
+  background-color: #c169a8;
+  text-decoration: none;
+  padding: 0 20px;
+  border-radius: 20px;
+  font-size: 1.35rem;
+  font-family: "Baloo 2", cursive;
+  color: #fff;
+  border: none;
+  margin: 0 15px 150px;
+}
+
+.terms {
+  margin-top: 50px;
+  margin-right: 30px;
+  margin-left: 15px;
+  width: 90%;
+}
+.terms div.flex {
+  display: flex;
+  justify-content: space-between;
+}
+.terms h2 {
+  font-size: 2.390625rem;
+  margin-bottom: 50px;
+}
+.terms h3 {
+  font-size: 1.40625rem;
+  margin-bottom: 10px;
+}
+.terms p {
+  margin-bottom: 20px;
+  text-indent: 50px;
+}
+.terms p:last-of-type {
+  margin-bottom: 50px;
+}
+.terms p.fixed {
+  margin-bottom: 10px;
+}
+.terms li {
+  margin-bottom: 10px;
+}
+
+.tos-aside {
+  position: relative;
+  display: block;
+  top: 0;
+  margin-top: 50px;
+}
+.tos-aside div.flex {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.tos-aside div.flex h2 {
+  font-size: 1.40625rem;
+}
+.tos-aside h2 {
+  font-size: 1.265625rem;
+  margin-bottom: 10px;
+}
+.tos-aside h3 {
+  font-size: 1.125rem;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 650px) {
+  .tos-aside div.flex {
+    display: none;
+  }
+}
+li.toggle {
+  font-size: 2rem;
+  cursor: pointer;
+}
+li.toggle.pack1 {
+  color: #84E296;
+}
+li.toggle.pack0 {
+  color: #e67c69;
+}
+
+.toggle-bg {
+  display: inline-block;
+  width: 40px;
+  height: 1.125rem;
+  background-color: #fbc8e8;
+  position: relative;
+  border-radius: 20px;
+  top: 8px;
+  left: 10px;
+  cursor: pointer;
+}
+
+.toggle-comments.on {
+  font-size: 2.25rem;
+  color: #84E296;
+  position: relative;
+  top: -45%;
+  cursor: pointer;
+  left: 0;
+}
+
+.toggle-comments.off {
+  font-size: 2.25rem;
+  color: #e67c69;
+  position: relative;
+  top: -45%;
+  cursor: pointer;
+  left: 17px;
+}
+
+.slide-out {
+  display: none;
+}
+.slide-out label {
+  display: block;
+  position: relative;
+}
+.slide-out textarea {
+  resize: none;
+  height: 5rem;
+  width: 94%;
+  display: block;
+  background-color: #FDE0F2;
+  border: none;
+  border-radius: 20px;
+  padding: 10px;
+  position: relative;
+  margin-bottom: 15px;
+  left: 2px;
+  font-family: "Baloo 2", cursive;
+}
+.slide-out textarea:focus {
+  outline: 2px solid #c169a8;
+}
+.slide-out form {
+  position: relative;
+}
+.slide-out form .feedback {
+  padding: 0;
+  margin: 0;
+  position: relative;
+  top: -0.5rem;
+}
+.slide-out form .thisone {
+  margin-left: 10px;
+}
+.slide-out .button {
+  padding: 0 20px;
+  background-color: #c169a8;
+  color: white;
+  font-family: "Baloo 2", cursive;
+  font-size: 1.125rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  top: 10px;
+  margin: 0 auto;
+  display: block;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: underline;
+}
+a.cancel {
+  display: none;
+}
+
+h4 {
+  display: flex;
+  justify-content: space-between;
+}
+h4 span {
+  font-size: 1.40625rem;
+  margin-right: 60%;
+}
+
+.select {
+  margin-top: 20px;
+}
+
+.total {
+  margin: 10px auto 0;
+  width: fit-content;
+}
+.total h4 {
+  display: flex;
+  justify-content: space-between;
+}
+.total h4 span {
+  font-size: 1.40625rem;
+  margin-right: 45%;
+}
+
+div.colorselect {
+  display: inline;
+  font-size: 1.40625rem;
+  margin-right: 10px;
+  padding: 5px 10px 2px;
+  border-radius: 20px;
+}
+div.colorselect.color0 {
+  background-color: #84E296;
+  color: #5b95d8;
+  border: 3px solid transparent;
+}
+div.colorselect.color1 {
+  background-color: #E384BE;
+  color: #f5d4de;
+  padding: 5px 13px 2px;
+  border: 3px solid transparent;
+}
+div.colorselect.color2 {
+  background-color: #50BCEB;
+  color: #aee3ec;
+  padding: 5px 11px 2px;
+  border: 3px solid transparent;
+}
+div.colorselect.color3 {
+  background-color: #7c6abb;
+  color: #ffc74e;
+  padding: 5px 13px 2px;
+  border: 3px solid transparent;
+}
+div.colorselect.current {
+  border: 3px solid #c84287;
+}
+div.colorselect.smol {
+  font-size: 0.9rem;
+  padding: 5px 5px 2px;
+  margin: 0;
+  position: relative;
+  left: 8px;
+}
+
+@media (min-width: 650px) {
+  .profile-int .user-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .profile-int .please {
+    width: 70%;
+    margin-right: 15px;
+  }
+  .profile-int .total {
+    width: 50%;
+  }
+  .profile-int .total-other {
+    margin-top: 0;
+    width: 40%;
+    margin-left: 50px;
+  }
+  .profile-int .total-other h4 span {
+    font-size: 1.40625rem;
+    margin-right: 10%;
+  }
+  .profile-int h4 span {
+    font-size: 1.40625rem;
+    margin-right: 55%;
+  }
+}
+@media (min-width: 900px) {
+  .profile-int .please {
+    width: 100%;
+  }
+  .profile-int .total {
+    width: 40%;
+  }
+  .profile-int .total-other {
+    width: 30%;
+    margin-left: 50px;
+  }
+  .profile-int .total-other h4 span {
+    font-size: 1.40625rem;
+    margin-right: 10%;
+  }
+  .profile-int h4 span {
+    font-size: 1.40625rem;
+    margin-right: 55%;
+  }
+}
+
+/*# sourceMappingURL=colors1.css.map */
