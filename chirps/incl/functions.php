@@ -174,6 +174,11 @@ function clean_email( $dirty = '' ){
 
 
 function make_letter_avatar($string, $size){
+    //if GD isn't enabled, use a safe fallback avatar
+    if(!function_exists('imagecreatetruecolor') || !function_exists('imagepng')){
+        return 'img/anon.webp';
+    }
+
 	//random pastel color
     $H =   mt_rand(0, 360);
     $S =   mt_rand(25, 50);
@@ -185,25 +190,34 @@ function make_letter_avatar($string, $size){
     $imageFilePath = 'img/avatars/' . $string . '_' .  $H . '_' . $S . '_' . $B . '.png';
 
     //base avatar image that we use to center our text string on top of it.
-    $avatar = imagecreatetruecolor($size, $size);  
+    $avatar = imagecreatetruecolor($size, $size);
+    if(!$avatar){
+        return 'img/anon.webp';
+    }
+
     //make and fill the BG color
     $bg_color = imagecolorallocate($avatar, $RGB['red'], $RGB['green'], $RGB['blue']);
     imagefill( $avatar, 0, 0, $bg_color );
     //white text
     $avatar_text_color = imagecolorallocate($avatar, 255, 255, 255);
-	// Load the gd font and write 
-    //$font = imageloadfont('gd-files/gd-font.gdf');
-    ///imagestring($avatar, $font, 10, 10, $string, $avatar_text_color);
-    
+
     $font = 'fonts/Baloo2-Medium.ttf';
     $x = ($size/2) - 14;
     $y = $size/2 + 15;
-    imagettftext($avatar, 30, 0, $x, $y, $avatar_text_color, $font, $string);
 
+    if(function_exists('imagettftext')){
+        imagettftext($avatar, 30, 0, $x, $y, $avatar_text_color, $font, $string);
+    }else{
+        imagestring($avatar, 5, 20, 20, $string, $avatar_text_color);
+    }
 
-    imagepng($avatar, $imageFilePath);
+    $did_save = imagepng($avatar, $imageFilePath);
 
     imagedestroy($avatar);
+
+    if(!$did_save){
+        return 'img/anon.webp';
+    }
 
     return $imageFilePath;
 }
