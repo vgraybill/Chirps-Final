@@ -7,7 +7,7 @@
 	</ul>
 </footer>
 
-    <?php if($logged_in_user['is_admin']){ ?>
+    <?php if($logged_in_user && $logged_in_user['is_admin']){ ?>
 		<script type="text/javascript">
 		//LIKE/UNLIKE	
 		document.body.addEventListener('click', function(e){
@@ -44,7 +44,7 @@
 		</script>
 	<?php } ?>
 	<!-- end script  Additions -->
-	<?php if($logged_in_user['is_admin']){ ?>
+	<?php if($logged_in_user && $logged_in_user['is_admin']){ ?>
 		<script type="text/javascript">
 		//LIKE/UNLIKE	
 		$('.toggle').on('click', function(e){
