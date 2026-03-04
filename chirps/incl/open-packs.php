@@ -1,6 +1,6 @@
 <?php
 
-if ($logged_in_user['is_admin']) { 
+if ($logged_in_user && $logged_in_user['is_admin']) { 
     $check = $DB->prepare(
         'SELECT cp.*
         FROM card_packs AS cp

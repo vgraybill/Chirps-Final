@@ -1,7 +1,7 @@
 <?php
 if(isset($_POST['did_submit']) ){
     $comment = clean_string($_POST['comment']);
-    $user_id = $logged_in_user['user_id'];
+    $user_id = 0;
 
     $valid=true;
     if(strlen($comment) > 500 or strlen($comment) < 5){
@@ -15,6 +15,8 @@ if(isset($_POST['did_submit']) ){
     if(!$logged_in_user){
         $valid=false;
         $errors['login'] = 'Log in to comment';
+    } else {
+        $user_id = $logged_in_user['user_id'];
     }
     if($valid){
         $result = $DB->prepare(
