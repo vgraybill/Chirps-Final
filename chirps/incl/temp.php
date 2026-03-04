@@ -43,29 +43,34 @@ if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['up
 		$errors['size'] = 'Your image does not meet the minimum size requirements.';
 	}
 
-	//if valid, process and resize the image
-	if($valid){
+		//if valid, process and resize the image
+		if($valid AND $has_gd){
 
 		//get the filetype
 		$filetype = $_FILES['uploadedfile']['type'];
 		$src = false;
 
-		switch( $filetype ){
-			case 'image/jpg':
-			case 'image/jpeg':
-			case 'image/pjpeg':
-				$src = imagecreatefromjpeg( $uploadedfile );
-			break;
+			switch( $filetype ){
+				case 'image/jpg':
+				case 'image/jpeg':
+				case 'image/pjpeg':
+					$src = imagecreatefromjpeg( $uploadedfile );
+				break;
 
-			case 'image/gif':
-				$src = imagecreatefromgif( $uploadedfile );
-			break;
+				case 'image/gif':
+					$src = imagecreatefromgif( $uploadedfile );
+				break;
 
-			case 'image/png':
-				//todo: increase resources on the server
-				$src = imagecreatefrompng( $uploadedfile );
-			break;
-		}
+				case 'image/png':
+					//todo: increase resources on the server
+					$src = imagecreatefrompng( $uploadedfile );
+				break;
+			}
+
+			if(!$src){
+				$valid = false;
+				$errors['filetype'] = 'Unsupported image type.';
+			}
 
 		if(!$src){
 			$valid = false;
@@ -115,8 +120,8 @@ if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['up
 		}
 
 
-		// Add post to Database
-		if($did_save AND $valid1){
+			// Add post to Database
+			if($did_save AND $valid1){
 			$que = $DB->prepare(
 				'SELECT users.profile_pic
 				FROM users
