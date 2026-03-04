@@ -1,13 +1,13 @@
 <?php
 
-clean_boolean($_POST['did_register']);
+$did_register = clean_boolean($_POST['did_register'] ?? 0);
 
-if(  $_POST['did_register']  ){
+if( $did_register ){
     //clean
-    $username = clean_string($_POST['username']);
-    $email = clean_email($_POST['email']);
-    $password = clean_string($_POST['password']);
-    $policy = clean_boolean($_POST['policy']);
+    $username = clean_string($_POST['username'] ?? '');
+    $email = clean_email($_POST['email'] ?? '');
+    $password = clean_string($_POST['password'] ?? '');
+    $policy = clean_boolean($_POST['policy'] ?? 0);
     //verify
     $valid = true;
     if(strlen($username) > USERNAME_MAX OR strlen($username) < USERNAME_MIN){
@@ -59,10 +59,10 @@ if(  $_POST['did_register']  ){
     if( $valid ){
 		//make an avatar
 		$avatar = make_letter_avatar( $username[0], 60 );
-		$query = 'INSERT INTO users
-					( email, username, password, profile_pic, bio, is_admin, date_joined )
-					VALUES 
-					( :email, :username, :password, :image, "", 0, now() )';
+			$query = 'INSERT INTO users
+						( email, username, password, profile_pic, bio, color_scheme, is_admin, date_joined, hashbrowns, reset_hash )
+						VALUES 
+						( :email, :username, :password, :image, "", 0, 0, now(), "", NULL )';
 		$result = $DB->prepare( $query );
 		//make a uniquely salted, hashed password for storage
 		$hashed_pass = password_hash( $password , PASSWORD_DEFAULT );
