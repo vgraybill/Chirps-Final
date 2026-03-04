@@ -153,20 +153,20 @@ function time_ago($datetime, $full = false) {
 
 //CLEANERS!
 
-function clean_string( &$dirty = ''){
+function clean_string( $dirty = ''){
 	return trim( strip_tags( $dirty) );
 }
-function clean_int( &$dirty = 0 ){
+function clean_int( $dirty = 0 ){
 	return filter_var( $dirty, FILTER_SANITIZE_NUMBER_INT );
 }
-function clean_boolean( &$dirty = 0 ){
+function clean_boolean( $dirty = 0 ){
 	if(! isset($dirty) OR ! $dirty ){
 		return 0;
 	}else{
 		return 1;
 	}
 }
-function clean_email( &$dirty = '' ){
+function clean_email( $dirty = '' ){
 	return filter_var( $dirty,  FILTER_SANITIZE_EMAIL );
 }
 
