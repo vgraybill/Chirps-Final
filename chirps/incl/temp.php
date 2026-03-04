@@ -1,14 +1,19 @@
 <?php 
+$valid1 = false;
+$bio = '';
+$user_id = 0;
+
 //if the user submitted the form
 if(isset($_POST['bio']) AND $_POST['bio'] != ''){
 $bio = clean_string($_POST['bio']);
 $valid1 = true;
 }
-$user_id = $logged_in_user['user_id'];
+if($logged_in_user){
+	$user_id = $logged_in_user['user_id'];
+}
 
 
-
-if( isset( $_POST['did_upload'] ) AND  file_exists($_FILES['uploadedfile']['tmp_name'])){
+if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['uploadedfile']['tmp_name'])){
 	//upload configuration 
 	//this directory must exist and be writable
 	$target_directory = 'img/avatars/';
@@ -20,11 +25,21 @@ if( isset( $_POST['did_upload'] ) AND  file_exists($_FILES['uploadedfile']['tmp_
 	//grab the image that they uploaded
 	
 
-	//validate
-	$valid = true;
+		//validate
+		$valid = true;
+		$did_save = false;
+		$filepath = '';
+		$has_gd = function_exists('imagecreatefromjpeg') && function_exists('imagecreatefromgif') && function_exists('imagecreatefrompng') && function_exists('imagecopyresampled') && function_exists('imagejpeg');
 
-	//get the dimensions of the image
-	list( $width, $height ) = getimagesize( $uploadedfile );
+		//get the dimensions of the image
+		$dimensions = getimagesize( $uploadedfile );
+		if($dimensions){
+			$width = $dimensions[0];
+			$height = $dimensions[1];
+		}else{
+			$width = 0;
+			$height = 0;
+		}
 
 	//does the image contain pixels?
 	if( $width == 0 OR $height == 0 ){
@@ -33,34 +48,41 @@ if( isset( $_POST['did_upload'] ) AND  file_exists($_FILES['uploadedfile']['tmp_
 		$errors['size'] = 'Your image does not meet the minimum size requirements.';
 	}
 
-	//if valid, process and resize the image
-	if($valid){
+		//if valid, process and resize the image
+		if($valid AND $has_gd){
 
-		//get the filetype
-		$filetype = $_FILES['uploadedfile']['type'];
+			//get the filetype
+			$filetype = $_FILES['uploadedfile']['type'];
+			$src = false;
 
-		switch( $filetype ){
-			case 'image/jpg':
-			case 'image/jpeg':
-			case 'image/pjpeg':
-				$src = imagecreatefromjpeg( $uploadedfile );
-			break;
+			switch( $filetype ){
+				case 'image/jpg':
+				case 'image/jpeg':
+				case 'image/pjpeg':
+					$src = imagecreatefromjpeg( $uploadedfile );
+				break;
 
-			case 'image/gif':
-				$src = imagecreatefromgif( $uploadedfile );
-			break;
+				case 'image/gif':
+					$src = imagecreatefromgif( $uploadedfile );
+				break;
 
-			case 'image/png':
-				//todo: increase resources on the server
-				$src = imagecreatefrompng( $uploadedfile );
-			break;
-		}
+				case 'image/png':
+					//todo: increase resources on the server
+					$src = imagecreatefrompng( $uploadedfile );
+				break;
+			}
 
-		//unique string for the final file name
-		$unique_name = sha1( microtime() );
+			if(!$src){
+				$valid = false;
+				$errors['filetype'] = 'Unsupported image type.';
+			}
 
-		//do the resizing
-		foreach( $sizes AS $size_name => $pixels ){
+			//unique string for the final file name
+			$unique_name = sha1( microtime() );
+
+			//do the resizing
+			if($valid){
+			foreach( $sizes AS $size_name => $pixels ){
 			//square crop calculations -  landscape or portrait
 			if( $width > $height ){
 				//landscape
@@ -87,14 +109,32 @@ if( isset( $_POST['did_upload'] ) AND  file_exists($_FILES['uploadedfile']['tmp_
 			$did_save = imagejpeg( $tmp_canvas, $filepath, 70 );
 
 		}//end foreach size
+		}
 
 		//clean up old resources
-		imagedestroy($src);
-		imagedestroy($tmp_canvas);
+		if($src){
+			imagedestroy($src);
+		}
+			if(isset($tmp_canvas) && $tmp_canvas){
+				imagedestroy($tmp_canvas);
+			}
+		}
+		else if($valid AND ! $has_gd){
+			//fallback for environments without GD: keep original upload
+			$extension = strtolower(pathinfo($_FILES['uploadedfile']['name'], PATHINFO_EXTENSION));
+			if(!in_array($extension, array('jpg', 'jpeg', 'gif', 'png'))){
+				$extension = 'jpg';
+			}
+			$filepath = $target_directory . sha1( microtime() ) . '_small.' . $extension;
+			$did_save = move_uploaded_file($uploadedfile, $filepath);
+			if(!$did_save){
+				$errors['save'] = 'Could not save uploaded image.';
+			}
+		}
 
 
-		// Add post to Database
-		if($did_save AND $valid1){
+			// Add post to Database
+			if($did_save AND $valid1){
 			$que = $DB->prepare(
 				'SELECT users.profile_pic
 				FROM users
@@ -148,8 +188,7 @@ if( isset( $_POST['did_upload'] ) AND  file_exists($_FILES['uploadedfile']['tmp_
 				}
 			}
 	}
-}
-if($valid1){
+if($logged_in_user AND $valid1){
 	$result = $DB->prepare(
 		'UPDATE users
 		SET

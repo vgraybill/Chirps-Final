@@ -123,47 +123,50 @@ function time_ago($datetime, $full = false) {
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
 
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
+    $weeks = floor($diff->d / 7);
+    $days = $diff->d - ($weeks * 7);
 
-    $string = array(
-        'y' => 'year',
-        'm' => 'month',
-        'w' => 'week',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
+    $parts = array(
+        'y' => array('label' => 'year', 'value' => $diff->y),
+        'm' => array('label' => 'month', 'value' => $diff->m),
+        'w' => array('label' => 'week', 'value' => $weeks),
+        'd' => array('label' => 'day', 'value' => $days),
+        'h' => array('label' => 'hour', 'value' => $diff->h),
+        'i' => array('label' => 'minute', 'value' => $diff->i),
+        's' => array('label' => 'second', 'value' => $diff->s),
     );
-    foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-        } else {
-            unset($string[$k]);
+
+    $string = array();
+    foreach ($parts as $part) {
+        if ($part['value']) {
+            $string[] = $part['value'] . ' ' . $part['label'] . ($part['value'] > 1 ? 's' : '');
         }
     }
 
-    if (!$full) $string = array_slice($string, 0, 1);
+    if (!$full) {
+        $string = array_slice($string, 0, 1);
+    }
+
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
 
 
 //CLEANERS!
 
-function clean_string( &$dirty = ''){
-	return trim( strip_tags( $dirty) );
+function clean_string( $dirty = ''){
+	return trim( strip_tags( (string)$dirty) );
 }
-function clean_int( &$dirty = 0 ){
+function clean_int( $dirty = 0 ){
 	return filter_var( $dirty, FILTER_SANITIZE_NUMBER_INT );
 }
-function clean_boolean( &$dirty = 0 ){
+function clean_boolean( $dirty = 0 ){
 	if(! isset($dirty) OR ! $dirty ){
 		return 0;
 	}else{
 		return 1;
 	}
 }
-function clean_email( &$dirty = '' ){
+function clean_email( $dirty = '' ){
 	return filter_var( $dirty,  FILTER_SANITIZE_EMAIL );
 }
 
@@ -171,6 +174,11 @@ function clean_email( &$dirty = '' ){
 
 
 function make_letter_avatar($string, $size){
+    //if GD isn't enabled, use a safe fallback avatar
+    if(!function_exists('imagecreatetruecolor') || !function_exists('imagepng')){
+        return 'img/anon.webp';
+    }
+
 	//random pastel color
     $H =   mt_rand(0, 360);
     $S =   mt_rand(25, 50);
@@ -182,25 +190,34 @@ function make_letter_avatar($string, $size){
     $imageFilePath = 'img/avatars/' . $string . '_' .  $H . '_' . $S . '_' . $B . '.png';
 
     //base avatar image that we use to center our text string on top of it.
-    $avatar = imagecreatetruecolor($size, $size);  
+    $avatar = imagecreatetruecolor($size, $size);
+    if(!$avatar){
+        return 'img/anon.webp';
+    }
+
     //make and fill the BG color
     $bg_color = imagecolorallocate($avatar, $RGB['red'], $RGB['green'], $RGB['blue']);
     imagefill( $avatar, 0, 0, $bg_color );
     //white text
     $avatar_text_color = imagecolorallocate($avatar, 255, 255, 255);
-	// Load the gd font and write 
-    //$font = imageloadfont('gd-files/gd-font.gdf');
-    ///imagestring($avatar, $font, 10, 10, $string, $avatar_text_color);
-    
+
     $font = 'fonts/Baloo2-Medium.ttf';
     $x = ($size/2) - 14;
     $y = $size/2 + 15;
-    imagettftext($avatar, 30, 0, $x, $y, $avatar_text_color, $font, $string);
 
+    if(function_exists('imagettftext')){
+        imagettftext($avatar, 30, 0, $x, $y, $avatar_text_color, $font, $string);
+    }else{
+        imagestring($avatar, 5, 20, 20, $string, $avatar_text_color);
+    }
 
-    imagepng($avatar, $imageFilePath);
+    $did_save = imagepng($avatar, $imageFilePath);
 
     imagedestroy($avatar);
+
+    if(!$did_save){
+        return 'img/anon.webp';
+    }
 
     return $imageFilePath;
 }

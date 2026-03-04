@@ -1,202 +1,190 @@
 <?php
-    require('config.php');
-    // Include the PHPMailer library
-    require('vendor/PHPMailer/src/Exception.php');
-    require('vendor/PHPMailer/src/PHPMailer.php');
-    require('vendor/PHPMailer/src/SMTP.php');
-    use PHPMailer\PHPMailer\PHPMailer;
+require('config.php');
+require('vendor/PHPMailer/src/Exception.php');
+require('vendor/PHPMailer/src/PHPMailer.php');
+require('vendor/PHPMailer/src/SMTP.php');
 
-    include_once('incl/functions.php');
+use PHPMailer\PHPMailer\PHPMailer;
 
-    include('incl/header.php');
+include_once('incl/functions.php');
 
-    if(isset($_REQUEST['reset']) AND $_REQUEST['reset'] != '0'){
-        $reset=clean_string($_REQUEST['reset']);
+include('incl/header.php');
 
-        $result = $DB->prepare(
-            'SELECT reset_hash
-            FROM users
-            WHERE reset_hash = :reset_hash
-            ');
-        $result->execute(array('reset_hash'=>$reset));
-        if($result->rowCount()>0){ ?>
-    <div class="int-wrapper">
-        <h2>Reset Your Password</h2>
+$feedback = '';
+$feedback_class = 'info';
+$errors = array();
 
-<?php       $new_password=clean_string($_REQUEST['password']);
-            $new_password=password_hash($new_password, PASSWORD_DEFAULT);
-            $did_reset=clean_boolean($_REQUEST['did_reset']);
+if (isset($_GET['reset']) && $_GET['reset'] !== '0') {
+    $reset = clean_string($_GET['reset']);
+
+    $result = $DB->prepare(
+        'SELECT reset_hash
+         FROM users
+         WHERE reset_hash = :reset_hash
+         LIMIT 1'
+    );
+    $result->execute(array('reset_hash' => $reset));
+
+    if ($result->rowCount() > 0) {
+        if (isset($_POST['did_reset'])) {
+            $new_password_raw = clean_string($_POST['password'] ?? '');
+            $did_reset = clean_boolean($_POST['did_reset'] ?? 0);
             $valid = true;
-            if($did_reset){
 
-                if(strlen($new_password)<PASSWORD_MIN){
-                    $valid=false;
-                    $errors['password']= 'Passwords must be at least'.PASSWORD_MIN.'characters long.';
+            if ($did_reset) {
+                if (strlen($new_password_raw) < PASSWORD_MIN) {
+                    $valid = false;
+                    $errors['password'] = 'Passwords must be at least ' . PASSWORD_MIN . ' characters long.';
                 }
-            
 
-                if($valid){
-                $result=$DB->prepare(
-                    'UPDATE users
-                    SET 
-                    password = :newpassword,
-                    reset_hash = 0
-                    WHERE reset_hash = :resethash
-                    ');
-                $result->execute(array(
-                    'newpassword'=>$new_password,
-                    'resethash'=>$reset
-                ));
-                if($result->rowCount()>0){
-                    $feedback="Password successfully reset, you may <a href='login.php?action='>log in</a> now.";
+                if ($valid) {
+                    $new_password = password_hash($new_password_raw, PASSWORD_DEFAULT);
+                    $result = $DB->prepare(
+                        'UPDATE users
+                         SET password = :newpassword,
+                             reset_hash = 0
+                         WHERE reset_hash = :resethash
+                         LIMIT 1'
+                    );
+                    $result->execute(array(
+                        'newpassword' => $new_password,
+                        'resethash' => $reset,
+                    ));
+
+                    if ($result->rowCount() > 0) {
+                        $feedback = "Password successfully reset, you may <a href='login.php?action='>log in</a> now.";
+                        $feedback_class = 'success';
+                    } else {
+                        $feedback = 'No changes were made. Your reset link may have already been used.';
+                        $feedback_class = 'info';
+                    }
+                } else {
+                    $feedback = 'Please fix the following:';
+                    $feedback_class = 'error';
                 }
             }
-            } ?>
-
-            <form action="password.php?reset=<?php echo $reset; ?>" method="post">
+        }
+        ?>
+        <div class="int-wrapper">
+            <h2>Reset Your Password</h2>
+            <?php show_feedback($feedback, $feedback_class, $errors); ?>
+            <form action="password.php?reset=<?php echo urlencode($reset); ?>" method="post">
                 <label>New Password<input type="password" name="password"></label>
-                <input type=submit value="Submit" class="button">
+                <input type="submit" value="Submit" class="button">
                 <input type="hidden" name="did_reset" value="1">
-                <label><?php echo show_feedback($feedback,$feedback_class,$errors); ?></label>
             </form>
         </div>
-
         <?php
-
-            //update to database where hash matches posted hash
-
-            //update password to new password and reset_hash to 0
-        }
-        else {
-            echo 'Error, hash not found';
-            //no reset_hash attached to user, change to header location after testing
-        }
+    } else {
+        echo '<div class="int-wrapper"><h2>Invalid or expired reset link.</h2></div>';
     }
-    else {         
-        if (isset($_REQUEST['did_submit'])){
+} else {
+    if (isset($_POST['did_submit'])) {
+        $username = clean_string($_POST['username'] ?? '');
+        $email = clean_email($_POST['email'] ?? '');
+        $valid = true;
 
-        $username = clean_string($_REQUEST['username']);
-        $email = clean_email($_REQUEST['email']);
-        $valid=true;
-        if (strlen($username) < 1){
-            $valid=false;
+        if (strlen($username) < 1) {
+            $valid = false;
             $errors['user'] = 'Username Required.';
         }
-        if (strlen($email) < 1){
-            $valid=false;
+        if (strlen($email) < 1) {
+            $valid = false;
             $errors['email'] = 'Email Required.';
         }
 
-        if($valid){
-        $result = $DB->prepare(
-            'SELECT u.username, u.email 
-            FROM users AS u
-            WHERE username = :username
-            AND email = :email
-            LIMIT 1
-            ');
-        $result->execute(array(
-            'username'=>$username,
-            'email'=>$email
-        ));
-        $mailer = new PHPMailer(true);
-
-        if($result->rowCount()>0){
-            //make a reset hash
-            $reset_hash = password_hash($username, PASSWORD_DEFAULT);
-            $reset_hash = substr($reset_hash, 10, 10);
-            //set reset hash in DB
+        if ($valid) {
             $result = $DB->prepare(
-                'UPDATE users
-                SET reset_hash = :reset_hash
-                WHERE username = :username
-                AND email = :email
-                LIMIT 1
-                ');
+                'SELECT u.username, u.email
+                 FROM users AS u
+                 WHERE username = :username
+                 AND email = :email
+                 LIMIT 1'
+            );
+            $result->execute(array(
+                'username' => $username,
+                'email' => $email,
+            ));
+
+            if ($result->rowCount() > 0) {
+                $reset_hash = substr(bin2hex(random_bytes(16)), 0, 15);
+
+                $result = $DB->prepare(
+                    'UPDATE users
+                     SET reset_hash = :reset_hash
+                     WHERE username = :username
+                     AND email = :email
+                     LIMIT 1'
+                );
                 $result->execute(array(
                     'reset_hash' => $reset_hash,
                     'username' => $username,
-                    'email' => $email
+                    'email' => $email,
                 ));
-            //send email to email with reset link
-            try{
-                // Set up to, from, and the message body.  The body doesn't have to be HTML; check the PHPMailer documentation for details.
-                $mailer->Sender = $email;
-                $mailer->AddReplyTo($email, $username);
-                $mailer->SetFrom($email, 'Chirps Password Recovery');
-                $mailer->AddAddress($email);
-                $mailer->Subject = 'Your Password Reset Request';
-                $mailer->MsgHTML("You requested a password reset from Chirps. Please follow this link to reset your password: 
-                https://chirps.ginnygraybill.com/password.php?reset=".$reset_hash."
-                ");
-            
-                // Set up our connection information.
-                $mailer->IsSMTP();
-                //show report when done
-                $mailer->SMTPDebug = DEBUG_MODE; 
-                $mailer->SMTPAuth = true;
-                $mailer->SMTPSecure = 'ssl';
-                $mailer->Port = 465;
-                $mailer->Host = 'ginnygraybill.com';
-                //Username to use for SMTP authentication - use full email address for gmail
-                $mailer->Username = 'password@ginnygraybill.com';
-            
-                //Your gmail account password goes here
-                $mailer->Password = '';
-            
-                // All done! send the mail and make sure it worked
-                if( $mailer->Send() ){
-                    //success
-                    $message = 'Thank you for contacting me.';
-                    $class = 'success';
+
+                $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') .
+                    '://' . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+                $reset_url = $base_url . '/password.php?reset=' . urlencode($reset_hash);
+
+                if (MAIL_PASSWORD === '') {
+                    $feedback = "Email sending is not configured on this environment yet. Use this reset link directly: <a href='$reset_url'>$reset_url</a>";
+                    $feedback_class = 'info';
+                } else {
+                    $mailer = new PHPMailer(true);
+                    try {
+                        $mailer->Sender = 'password@ginnygraybill.com';
+                        $mailer->addReplyTo('password@ginnygraybill.com', 'Chirps Password Recovery');
+                        $mailer->setFrom('password@ginnygraybill.com', 'Chirps Password Recovery');
+                        $mailer->addAddress($email);
+                        $mailer->Subject = 'Your Password Reset Request';
+                        $mailer->msgHTML("You requested a password reset from Chirps. Please follow this link to reset your password: <a href='$reset_url'>$reset_url</a>");
+
+                        $mailer->isSMTP();
+                        $mailer->SMTPDebug = DEBUG_MODE ? 2 : 0;
+                        $mailer->SMTPAuth = true;
+                        $mailer->SMTPSecure = 'ssl';
+                        $mailer->Port = 465;
+                        $mailer->Host = 'ginnygraybill.com';
+                        $mailer->Username = 'password@ginnygraybill.com';
+                        $mailer->Password = MAIL_PASSWORD;
+
+                        $mailer->send();
+                        $feedback = 'Please check your e-mail. If an account exists, a link to reset your password was sent. Please check your spam folder before resubmitting a request.';
+                        $feedback_class = 'success';
+                    } catch (Exception $e) {
+                        $feedback = "Could not send e-mail on this environment. Use this reset link directly: <a href='$reset_url'>$reset_url</a>";
+                        $feedback_class = 'error';
+                        if (DEBUG_MODE) {
+                            $errors[] = $e->getMessage();
+                        }
+                    }
+                }
+            } else {
+                $feedback = 'Please check your e-mail. If an account exists, a link to reset your password was sent. Please check your spam folder before resubmitting a request.';
+                $feedback_class = 'info';
+                if (DEBUG_MODE) {
+                    $errors['nomatch'] = 'No username + email match.';
                 }
             }
-            catch(phpmailerException $e){
-                /*phpmailer exception*/
-                $message = 'Sorry, the server could not send your message at this time.';
-                $class = 'error';
-                $errors[] =  $e->errorMessage();
-            }
-            catch(Exception $e) {
-                $message = 'The mail could not send';
-                $class = 'error';
-                $errors[] = $e->getMessage(); 
-            }
-
-
-
-            $feedback = "Please check your e-mail. If an account exists, a link to reset your password was sent. Please check your spam folder before resubmitting a request.";
-        } else {
-            $feedback = "Please check your e-mail. If an account exists, a link to reset your password was sent. Please check your spam folder before resubmitting a request.";
-            if(DEBUG_MODE){
-                $errors['nomatch'] = "no match.";
-            }
         }
 
-        } else {
-            $feedback = "";
+        if (!$valid) {
+            $feedback = 'Please fix the following:';
+            $feedback_class = 'error';
         }
     }
-         ?>
+    ?>
     <div class="int-wrapper">
         <h2>Reset Your Password</h2>
+        <?php show_feedback($feedback, $feedback_class, $errors); ?>
         <form action="password.php" method="post">
             <label>Username<input type="text" name="username"></label>
             <label>E-mail<input type="text" name="email"></label>
-            <input type=submit value="Submit" class="button">
+            <input type="submit" value="Submit" class="button">
             <input type="hidden" name="did_submit" value="1">
-            <label><?php echo show_feedback($feedback,$feedback_class,$errors); ?></label>
         </form>
     </div>
-    <?php 
+    <?php
+}
 
-        //if match, send an email to db email assosiated with username with a newly hashed reset_hash
-        //set reset_hash to new reset_hash
-        //redirect to 'check email' message
-     }
-
-    ?>
-
-
-
-<?php include('incl/footer.php') ?>
+include('incl/footer.php');
