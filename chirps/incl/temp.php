@@ -27,6 +27,11 @@ if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['up
 
 	//validate
 	$valid = true;
+	$has_gd = function_exists('imagecreatefromjpeg') && function_exists('imagecreatefrompng') && function_exists('imagecopyresampled') && function_exists('imagejpeg');
+	if(!$has_gd){
+		$valid = false;
+		$errors['gd'] = 'Image editing is unavailable because the GD extension is not enabled.';
+	}
 
 	//get the dimensions of the image
 	list( $width, $height ) = getimagesize( $uploadedfile );
@@ -43,6 +48,7 @@ if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['up
 
 		//get the filetype
 		$filetype = $_FILES['uploadedfile']['type'];
+		$src = false;
 
 		switch( $filetype ){
 			case 'image/jpg':
@@ -61,10 +67,16 @@ if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['up
 			break;
 		}
 
+		if(!$src){
+			$valid = false;
+			$errors['filetype'] = 'Unsupported image type.';
+		}
+
 		//unique string for the final file name
 		$unique_name = sha1( microtime() );
 
 		//do the resizing
+		if($valid){
 		foreach( $sizes AS $size_name => $pixels ){
 			//square crop calculations -  landscape or portrait
 			if( $width > $height ){
@@ -92,10 +104,15 @@ if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['up
 			$did_save = imagejpeg( $tmp_canvas, $filepath, 70 );
 
 		}//end foreach size
+		}
 
 		//clean up old resources
-		imagedestroy($src);
-		imagedestroy($tmp_canvas);
+		if($src){
+			imagedestroy($src);
+		}
+		if(isset($tmp_canvas) && $tmp_canvas){
+			imagedestroy($tmp_canvas);
+		}
 
 
 		// Add post to Database
