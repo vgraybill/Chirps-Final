@@ -154,6 +154,7 @@ function time_ago($datetime, $full = false) {
 //CLEANERS!
 
 function clean_string( $dirty = ''){
+	return trim( strip_tags( (string)$dirty) );
 	return trim( strip_tags( $dirty) );
 }
 function clean_int( $dirty = 0 ){

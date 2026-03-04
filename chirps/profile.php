@@ -52,6 +52,7 @@
                 
             </div>
             <div class="slide-out">
+					<?php show_feedback( $feedback, $feedback_class, $errors ); ?>
                     <form enctype="multipart/form-data" action="profile.php?user=<?php echo $profile; ?>" method="post">
                         <label>Update Your Bio<textarea name="bio"><?php echo $bio; ?></textarea></label>
                         <label>Update Your Profile Pic <input class="thisone" type="file" name="uploadedfile" id="uploadedfile" accept="image/*">
