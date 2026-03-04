@@ -8,11 +8,11 @@
 /* ------------------configure these variables----------------- */
 
 
-define('DEBUG_MODE', false);
+define('DEBUG_MODE', true);
 
 
-$host = 'localhost';
-$user = '';
+$host = '127.0.0.1';
+$user = 'root';
 $pass = '';
 $dbname = 'chirps';
 
