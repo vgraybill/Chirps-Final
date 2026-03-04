@@ -27,7 +27,7 @@
 
 <main>
     <div class="profile-int">
-        <?php if($logged_in_user['user_id'] == $profile){ ?>
+        <?php if($logged_in_user && $logged_in_user['user_id'] == $profile){ ?>
 
         <section class="user-info">
             <div class="please">
@@ -154,7 +154,7 @@
                 $('.edit').fadeIn(300)
                 
             })
-            <?php if($logged_in_user['user_id'] == $profile){?>
+            <?php if($logged_in_user && $logged_in_user['user_id'] == $profile){?>
             $('.colorselect').on('click', function(){
                 let theButton = $(this)
                 if (theButton.hasClass('color0')){
@@ -213,10 +213,10 @@
         </script>
 </main>
 <?php
-    $color_scheme = clean_int($_REQUEST['color_scheme']);
-    $user_id = clean_int($_REQUEST['user']);
-    $valid = clean_boolean($_REQUEST['valid']);
-    if($logged_in_user['user_id'] == $user_id AND $valid == 1){
+    $color_scheme = clean_int($_REQUEST['color_scheme'] ?? 0);
+    $user_id = clean_int($_REQUEST['user'] ?? 0);
+    $valid = clean_boolean($_REQUEST['valid'] ?? 0);
+    if($logged_in_user && $logged_in_user['user_id'] == $user_id AND $valid == 1){
 
             $result = $DB->prepare(
                 'UPDATE users
