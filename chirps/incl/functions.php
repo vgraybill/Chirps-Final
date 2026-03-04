@@ -123,47 +123,50 @@ function time_ago($datetime, $full = false) {
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
 
-    $diff->w = floor($diff->d / 7);
-    $diff->d -= $diff->w * 7;
+    $weeks = floor($diff->d / 7);
+    $days = $diff->d - ($weeks * 7);
 
-    $string = array(
-        'y' => 'year',
-        'm' => 'month',
-        'w' => 'week',
-        'd' => 'day',
-        'h' => 'hour',
-        'i' => 'minute',
-        's' => 'second',
+    $parts = array(
+        'y' => array('label' => 'year', 'value' => $diff->y),
+        'm' => array('label' => 'month', 'value' => $diff->m),
+        'w' => array('label' => 'week', 'value' => $weeks),
+        'd' => array('label' => 'day', 'value' => $days),
+        'h' => array('label' => 'hour', 'value' => $diff->h),
+        'i' => array('label' => 'minute', 'value' => $diff->i),
+        's' => array('label' => 'second', 'value' => $diff->s),
     );
-    foreach ($string as $k => &$v) {
-        if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-        } else {
-            unset($string[$k]);
+
+    $string = array();
+    foreach ($parts as $part) {
+        if ($part['value']) {
+            $string[] = $part['value'] . ' ' . $part['label'] . ($part['value'] > 1 ? 's' : '');
         }
     }
 
-    if (!$full) $string = array_slice($string, 0, 1);
+    if (!$full) {
+        $string = array_slice($string, 0, 1);
+    }
+
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
 
 
 //CLEANERS!
 
-function clean_string( &$dirty = ''){
+function clean_string( $dirty = ''){
 	return trim( strip_tags( $dirty) );
 }
-function clean_int( &$dirty = 0 ){
+function clean_int( $dirty = 0 ){
 	return filter_var( $dirty, FILTER_SANITIZE_NUMBER_INT );
 }
-function clean_boolean( &$dirty = 0 ){
+function clean_boolean( $dirty = 0 ){
 	if(! isset($dirty) OR ! $dirty ){
 		return 0;
 	}else{
 		return 1;
 	}
 }
-function clean_email( &$dirty = '' ){
+function clean_email( $dirty = '' ){
 	return filter_var( $dirty,  FILTER_SANITIZE_EMAIL );
 }
 
