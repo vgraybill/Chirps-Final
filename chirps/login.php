@@ -7,9 +7,10 @@ require('incl/login-parse.php');
 
 //doctype and visible header
 require('incl/header.php');
-if(isset($_GET['action'])) { $action = $_GET['action'];} 
-if($_GET['action'] == 'success'){
+$action = clean_string($_GET['action'] ?? '');
+if($action == 'success'){
     $feedback='Success, you can now log in!';
+    $feedback_class = 'success';
 }
 ?>
 <main>
@@ -34,8 +35,8 @@ if($_GET['action'] == 'success'){
     </div>
     <div class="blank"></div>
 </main>
-<?php
-if(isset($_GET['action']) AND $_GET['action'] == 'logout'){ ?>
+	<?php
+if($action == 'logout'){ ?>
 <script>
     window.location.replace("login.php?action=")
 </script>

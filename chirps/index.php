@@ -79,7 +79,7 @@
                 </div>
                     <div class="under-post">
                     <span class="next-to-likes">
-                        <?php if($logged_in_user['is_admin']){
+                        <?php if($logged_in_user && $logged_in_user['is_admin']){
                         
                         if($logged_in_user){
                             $viewer_id = $logged_in_user['user_id'];
