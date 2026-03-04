@@ -1,14 +1,19 @@
 <?php 
+$valid1 = false;
+$bio = '';
+$user_id = 0;
+
 //if the user submitted the form
 if(isset($_POST['bio']) AND $_POST['bio'] != ''){
 $bio = clean_string($_POST['bio']);
 $valid1 = true;
 }
-$user_id = $logged_in_user['user_id'];
+if($logged_in_user){
+	$user_id = $logged_in_user['user_id'];
+}
 
 
-
-if( isset( $_POST['did_upload'] ) AND  file_exists($_FILES['uploadedfile']['tmp_name'])){
+if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['uploadedfile']['tmp_name'])){
 	//upload configuration 
 	//this directory must exist and be writable
 	$target_directory = 'img/avatars/';
@@ -149,7 +154,7 @@ if( isset( $_POST['did_upload'] ) AND  file_exists($_FILES['uploadedfile']['tmp_
 			}
 	}
 }
-if($valid1){
+if($logged_in_user AND $valid1){
 	$result = $DB->prepare(
 		'UPDATE users
 		SET
