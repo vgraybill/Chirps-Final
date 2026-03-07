@@ -25,7 +25,7 @@
         extract($row);
 ?>
 
-<main>
+<main><?php show_feedback( $feedback, $feedback_class, $errors ); ?>
     <div class="profile-int">
 		<?php show_feedback( $feedback, $feedback_class, $errors ); ?>
         <?php if($logged_in_user && $logged_in_user['user_id'] == $profile){ ?>
@@ -242,6 +242,8 @@
                 $feedback_class = 'info';
             }
         }
+
+        var_dump(is_dir('img/avatars/'), is_writable('img/avatars/'));
 
     ?>
 <?php }

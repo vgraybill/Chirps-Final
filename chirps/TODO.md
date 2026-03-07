@@ -4,6 +4,14 @@
 ---------------------------------------------------------------------------------
 TO DO:
 ---------------------------------------------------------------------------------
+* [PHP-CLEANUP][MAIL] Re-enable SMTP password reset emails
+  - Current behavior: fallback reset link shown when MAIL_PASSWORD is empty (local/dev)
+  - Goal: move SMTP host/user/pass/port into env-based config and verify real email delivery
+  - Blocked by: finish PHP runtime error cleanup first
+
+- [ ] Add mail config constants/env vars
+- [ ] Test with local mail sandbox or real SMTP creds
+- [ ] Confirm reset email arrives + link successfully resets password
 
 
 
