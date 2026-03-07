@@ -1,5 +1,4 @@
 <?php
-<?php 
 $valid1 = false;
 $bio = '';
 $user_id = 0;
@@ -20,6 +19,33 @@ if($logged_in_user){
 
 $did_upload = clean_boolean($_POST['did_upload'] ?? 0);
 $has_upload = isset($_FILES['uploadedfile']['tmp_name']) && is_uploaded_file($_FILES['uploadedfile']['tmp_name']);
+
+if(DEBUG_MODE && $did_upload){
+    echo "<pre style='background:#111;color:#0f0;padding:12px;font-size:12px;white-space:pre-wrap;'>";
+    echo "=== PROFILE UPLOAD DEBUG ===\n";
+    echo "did_upload: "; var_dump($did_upload);
+    echo "has_upload: "; var_dump($has_upload);
+    echo "\n_FILES['uploadedfile']:\n";
+    var_dump($_FILES['uploadedfile'] ?? null);
+
+    $target_directory = 'img/avatars/';
+    echo "\nPath checks:\n";
+    echo "target_directory: $target_directory\n";
+    echo "is_dir: "; var_dump(is_dir($target_directory));
+    echo "is_writable: "; var_dump(is_writable($target_directory));
+    echo "realpath(target_directory): "; var_dump(realpath($target_directory));
+
+    if(isset($_FILES['uploadedfile']['tmp_name'])){
+        $tmp = $_FILES['uploadedfile']['tmp_name'];
+        echo "\nTmp checks:\n";
+        echo "tmp_name: $tmp\n";
+        echo "file_exists(tmp): "; var_dump(file_exists($tmp));
+        echo "is_uploaded_file(tmp): "; var_dump(is_uploaded_file($tmp));
+        echo "getimagesize(tmp): "; var_dump(getimagesize($tmp));
+    }
+    echo "============================\n";
+    echo "</pre>";
+}
 
 if($logged_in_user && $did_upload){
 	if(!$has_upload){
@@ -53,6 +79,16 @@ if($logged_in_user && $did_upload){
 
 		$has_gd = function_exists('imagecreatefromjpeg') && function_exists('imagecreatefromgif') && function_exists('imagecreatefrompng') && function_exists('imagecopyresampled') && function_exists('imagejpeg');
 
+		if(DEBUG_MODE && $did_upload){
+    echo "<pre style='background:#111;color:#ff0;padding:12px;font-size:12px;white-space:pre-wrap;'>";
+    echo "has_gd: "; var_dump($has_gd);
+    echo "</pre>";
+}
+if(DEBUG_MODE && $did_upload){
+    echo "<pre>pre-branch valid="; var_dump($valid);
+    echo "has_gd="; var_dump($has_gd); echo "</pre>";
+}
+
 		if($valid && $has_gd){
 			$filetype = $_FILES['uploadedfile']['type'];
 			$src = false;
@@ -70,7 +106,7 @@ if($logged_in_user && $did_upload){
 
 				case 'image/png':
 					$src = imagecreatefrompng($uploadedfile);
-				break;
+				break; }}}}
 if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['uploadedfile']['tmp_name'])){
 	//upload configuration 
 	//this directory must exist and be writable
@@ -101,6 +137,11 @@ if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['up
 		$errors['size'] = 'Your image does not meet the minimum size requirements.';
 	}
 
+	if(DEBUG_MODE && $did_upload){
+    echo "<pre>post-branch did_save="; var_dump($did_save);
+    echo "filepath="; var_dump($filepath);
+    echo "exists="; var_dump($filepath ? file_exists($filepath) : false); echo "</pre>";
+}
 		//if valid, process and resize the image
 		if($valid AND $has_gd){
 
@@ -200,6 +241,15 @@ if($logged_in_user AND isset( $_POST['did_upload'] ) AND file_exists($_FILES['up
 			}
 		}
 
+		if(DEBUG_MODE && $did_upload){
+    echo "<pre style='background:#111;color:#0ff;padding:12px;font-size:12px;white-space:pre-wrap;'>";
+    echo "did_save: "; var_dump($did_save);
+    echo "filepath: "; var_dump($filepath);
+    echo "file_exists(filepath): "; var_dump($filepath ? file_exists($filepath) : false);
+    echo "realpath(dirname(filepath)): "; var_dump($filepath ? realpath(dirname($filepath)) : false);
+    echo "</pre>";
+}
+
 		if($did_save){
 			// Add post to Database
 			if($did_save AND $valid1){
@@ -268,4 +318,4 @@ if($logged_in_user AND $valid1){
 	);
 
 	$result->execute($data);
-}
+}}
