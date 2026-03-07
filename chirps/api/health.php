@@ -1,5 +1,7 @@
 <?php
 
+require_once('../config.php');
+
 header('Content-Type: application/json; charset=utf-8');
 
 $response = array(
@@ -23,5 +25,9 @@ try {
     $response['status'] = 'degraded';
     $response['error'] = 'Database connection failed';
 }
+
+    'session_active' => session_status() === PHP_SESSION_ACTIVE,
+    'debug_mode' => DEBUG_MODE,
+);
 
 echo json_encode($response);

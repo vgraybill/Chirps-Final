@@ -155,6 +155,7 @@ function time_ago($datetime, $full = false) {
 
 function clean_string( $dirty = ''){
 	return trim( strip_tags( (string)$dirty) );
+	return trim( strip_tags( $dirty) );
 }
 function clean_int( $dirty = 0 ){
 	return filter_var( $dirty, FILTER_SANITIZE_NUMBER_INT );

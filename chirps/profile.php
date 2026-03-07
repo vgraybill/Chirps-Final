@@ -25,7 +25,7 @@
         extract($row);
 ?>
 
-<main>
+<main><?php show_feedback( $feedback, $feedback_class, $errors ); ?>
     <div class="profile-int">
         <?php if($logged_in_user && $logged_in_user['user_id'] == $profile){ ?>
 
@@ -51,8 +51,9 @@
                 </div>
                 
             </div>
+           
             <div class="slide-out">
-					<?php show_feedback( $feedback, $feedback_class, $errors ); ?>
+					 <?php show_feedback( $feedback, $feedback_class, $errors ); ?>
                     <form enctype="multipart/form-data" action="profile.php?user=<?php echo $profile; ?>" method="post">
                         <label>Update Your Bio<textarea name="bio"><?php echo $bio; ?></textarea></label>
                         <label>Update Your Profile Pic <input class="thisone" type="file" name="uploadedfile" id="uploadedfile" accept="image/*">
@@ -242,6 +243,8 @@
                 $feedback_class = 'info';
             }
         }
+
+        var_dump(is_dir('img/avatars/'), is_writable('img/avatars/'));
 
     ?>
 <?php }
