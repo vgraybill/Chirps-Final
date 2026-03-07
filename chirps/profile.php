@@ -27,6 +27,7 @@
 
 <main><?php show_feedback( $feedback, $feedback_class, $errors ); ?>
     <div class="profile-int">
+		<?php show_feedback( $feedback, $feedback_class, $errors ); ?>
         <?php if($logged_in_user && $logged_in_user['user_id'] == $profile){ ?>
 
         <section class="user-info">
@@ -50,11 +51,9 @@
                     <?php echo current_theme_choose(); ?>
                 </div>
                 
-            </div>
-           
-            <div class="slide-out">
-					 <?php show_feedback( $feedback, $feedback_class, $errors ); ?>
-                    <form enctype="multipart/form-data" action="profile.php?user=<?php echo $profile; ?>" method="post">
+	            </div>
+	            <div class="slide-out">
+	                    <form enctype="multipart/form-data" action="profile.php?user=<?php echo $profile; ?>" method="post">
                         <label>Update Your Bio<textarea name="bio"><?php echo $bio; ?></textarea></label>
                         <label>Update Your Profile Pic <input class="thisone" type="file" name="uploadedfile" id="uploadedfile" accept="image/*">
 

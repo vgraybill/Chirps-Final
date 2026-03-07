@@ -108,7 +108,10 @@ if($logged_in_user && $did_upload){
 			}
 			if(!$did_save){
 				$upload_error = $_FILES['uploadedfile']['error'] ?? 'unknown';
-				$errors['save'] = 'Could not save uploaded image (upload error code: ' . $upload_error . ').';
+				$errors['save'] = 'Could not save uploaded image.';
+				if(DEBUG_MODE){
+					$errors['save_debug'] = 'Upload error code: ' . $upload_error;
+				}
 			}
 		}
 
