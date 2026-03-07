@@ -86,7 +86,7 @@
                     </span>
 
                     <span class="next-to-likes">
-                        <?php if($logged_in_user['is_admin']){
+                        <?php if($logged_in_user && $logged_in_user['is_admin']){
                         
                         if($logged_in_user){
                             $viewer_id = $logged_in_user['user_id'];
@@ -111,7 +111,7 @@
         } ?>
 
             <aside class= "poem-aside">
-                <?php if($logged_in_user['user_id'] == $user_id){
+                <?php if($logged_in_user && $logged_in_user['user_id'] == $user_id){
                     if($allow_comments == 1){
                         $comments='on';
                      } else {
@@ -187,10 +187,10 @@
     </main>
 
     <?php
-    $comments_on_off = clean_int($_REQUEST['comments']);
-    $post_id = clean_int($_REQUEST['post_id']);
-    $valid = clean_boolean($_REQUEST['valid']);
-    if($logged_in_user['user_id'] == $user_id AND $valid == 1){
+    $comments_on_off = clean_int($_REQUEST['comments'] ?? 0);
+    $post_id = clean_int($_REQUEST['post_id'] ?? 0);
+    $valid = clean_boolean($_REQUEST['valid'] ?? 0);
+    if($logged_in_user && $logged_in_user['user_id'] == $user_id AND $valid == 1){
 
             $result = $DB->prepare(
                 'UPDATE posts

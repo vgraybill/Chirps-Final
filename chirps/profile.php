@@ -27,7 +27,8 @@
 
 <main>
     <div class="profile-int">
-        <?php if($logged_in_user['user_id'] == $profile){ ?>
+		<?php show_feedback( $feedback, $feedback_class, $errors ); ?>
+        <?php if($logged_in_user && $logged_in_user['user_id'] == $profile){ ?>
 
         <section class="user-info">
             <div class="please">
@@ -50,9 +51,9 @@
                     <?php echo current_theme_choose(); ?>
                 </div>
                 
-            </div>
-            <div class="slide-out">
-                    <form enctype="multipart/form-data" action="profile.php?user=<?php echo $profile; ?>" method="post">
+	            </div>
+	            <div class="slide-out">
+	                    <form enctype="multipart/form-data" action="profile.php?user=<?php echo $profile; ?>" method="post">
                         <label>Update Your Bio<textarea name="bio"><?php echo $bio; ?></textarea></label>
                         <label>Update Your Profile Pic <input class="thisone" type="file" name="uploadedfile" id="uploadedfile" accept="image/*">
 
@@ -154,7 +155,7 @@
                 $('.edit').fadeIn(300)
                 
             })
-            <?php if($logged_in_user['user_id'] == $profile){?>
+            <?php if($logged_in_user && $logged_in_user['user_id'] == $profile){?>
             $('.colorselect').on('click', function(){
                 let theButton = $(this)
                 if (theButton.hasClass('color0')){
@@ -213,10 +214,10 @@
         </script>
 </main>
 <?php
-    $color_scheme = clean_int($_REQUEST['color_scheme']);
-    $user_id = clean_int($_REQUEST['user']);
-    $valid = clean_boolean($_REQUEST['valid']);
-    if($logged_in_user['user_id'] == $user_id AND $valid == 1){
+    $color_scheme = clean_int($_REQUEST['color_scheme'] ?? 0);
+    $user_id = clean_int($_REQUEST['user'] ?? 0);
+    $valid = clean_boolean($_REQUEST['valid'] ?? 0);
+    if($logged_in_user && $logged_in_user['user_id'] == $user_id AND $valid == 1){
 
             $result = $DB->prepare(
                 'UPDATE users

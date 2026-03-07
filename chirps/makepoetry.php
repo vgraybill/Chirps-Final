@@ -420,19 +420,19 @@
 
 
 //incoming data (from js fetch)
-$title = clean_string($_POST['title']);
-$body = clean_string($_POST['body']);
-$has_username = clean_boolean($_POST['hasUsername']);
-$allow_comments = clean_boolean($_POST['allowComments']);
-$is_published = clean_boolean($_POST['isPublished']);
-$post_alt = clean_string($_POST['post_alt']);
-$user_id = clean_int($_POST['user_id']);
-$did_submit = clean_boolean($_POST['didSubmit']);
-$uploaded_file = $_REQUEST['image'];
+$title = clean_string($_POST['title'] ?? '');
+$body = clean_string($_POST['body'] ?? '');
+$has_username = clean_boolean($_POST['hasUsername'] ?? 0);
+$allow_comments = clean_boolean($_POST['allowComments'] ?? 0);
+$is_published = clean_boolean($_POST['isPublished'] ?? 0);
+$post_alt = clean_string($_POST['post_alt'] ?? '');
+$user_id = clean_int($_POST['user_id'] ?? 0);
+$did_submit = clean_boolean($_POST['didSubmit'] ?? 0);
+$uploaded_file = $_REQUEST['image'] ?? '';
 //if the user submitted the form
 if($did_submit==1){
 $target_directory = 'img/posts/';
-$cnvimg = trim(strip_tags($_POST['image']));
+$cnvimg = trim(strip_tags($_POST['image'] ?? ''));
 $cnvimg = str_replace(['data:image/png;base64,', ' '], ['', '+'], $cnvimg);
 
 //set image name from 'imgname', or unique name set with uniqid()
@@ -478,9 +478,9 @@ $save = file_put_contents($file, $data);
 //end upload parser ?>
 
 <?php
-    $pack_id = clean_int($_REQUEST['pack_id']);
-    $is_ava = clean_int($_REQUEST['is_ava']);
-    $valid = clean_boolean($_REQUEST['valid']);
+    $pack_id = clean_int($_REQUEST['pack_id'] ?? 0);
+    $is_ava = clean_int($_REQUEST['is_ava'] ?? 0);
+    $valid = clean_boolean($_REQUEST['valid'] ?? 0);
     if($valid == 1){
         $check = $DB->prepare(
             'SELECT cp.*
